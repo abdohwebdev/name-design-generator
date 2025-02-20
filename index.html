@@ -37,16 +37,22 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        .result {
+        .result, .error {
             margin-top: 20px;
             padding: 20px;
             font-size: 24px;
             font-weight: bold;
-            animation: fadeIn 1s ease-in-out;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .error {
+            color: red;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -55,44 +61,59 @@
         <h2>أدخل اسمك</h2>
         <input type="text" id="userName" placeholder="اكتب اسمك هنا">
         <button onclick="generateNameArt()">إنشاء</button>
+        <div class="error" id="error"></div>
         <div class="result" id="result"></div>
     </div>
 
     <script>
+        let validNames = ["عبدالرحمن", "محمد", "فاطمة", "علي", "منال", "لبنى", "صابرين", "وفاء", "نهلة", "مروة","آمنة","شيماء"]; // قائمة الأسماء المسموحة
+
         function generateNameArt() {
             let name = document.getElementById("userName").value.trim();
+            let errorDiv = document.getElementById("error");
+            let resultDiv = document.getElementById("result");
+            errorDiv.innerHTML = "";
+            resultDiv.innerHTML = "";
+            resultDiv.classList.remove("show");
             
             if (!name) {
-                alert("يرجى إدخال الاسم!");
+                errorDiv.innerHTML = "يرجى إدخال الاسم!";
+                errorDiv.classList.add("show");
+                return;
+            }
+            
+            if (!validNames.includes(name)) {
+                errorDiv.innerHTML = "الاسم غير موجود في القائمة!";
+                errorDiv.classList.add("show");
                 return;
             }
             
             let messages = [
-        "العالم يحتاج إلى ممرض مثلك!",
-        "طيبتك ستشفي الكثير من القلوب!",
-        "مرضاك المستقبليون محظوظون بوجودك!",
-        "النجاح هو مجرد البداية لك!",
-        "رحلتك بدأت، وأمامك مستقبل مشرق!",
-        "أنت مصدر نور وأمل لمن حولك!",
-        "اجعل كل يوم خطوة نحو تحقيق أحلامك!",
-        "كل تحدٍّ يواجهك هو فرصة للنمو!",
-        "العالم يحتاج إلى روحك الطيبة وابتسامتك!",
-        "النجاح ليس هدفًا، بل رحلة تستحق العيش!",
-        "العطاء لا حدود له، وأنت رمز للعطاء!",
-        "أنت نور يضيء حياة الآخرين!",
-        "رحلتك في التمريض ليست مجرد مهنة، بل رسالة إنسانية عظيمة!",
-        "جهودك اليوم ستصنع غدًا أفضل لك وللآخرين!",
-        "كل روح تلمسها، تترك فيها أثرًا جميلًا!",
-        "الابتسامة دواء القلوب!",
-        "أنت قصة نجاح تُكتب بحروف من نور!",
-];
+                "العالم يحتاج إلى ممرض مثلك!",
+                "طيبتك ستشفي الكثير من القلوب!",
+                "مرضاك المستقبليون محظوظون بوجودك!",
+                "النجاح هو مجرد البداية لك!",
+                "رحلتك بدأت، وأمامك مستقبل مشرق!",
+                "أنت مصدر نور وأمل لمن حولك!",
+                "اجعل كل يوم خطوة نحو تحقيق أحلامك!",
+                "كل تحدٍّ يواجهك هو فرصة للنمو!",
+                "العالم يحتاج إلى روحك الطيبة وابتسامتك!",
+                "النجاح ليس هدفًا، بل رحلة تستحق العيش!",
+                "العطاء لا حدود له، وأنت رمز للعطاء!",
+                "أنت نور يضيء حياة الآخرين!",
+                "رحلتك في التمريض ليست مجرد مهنة، بل رسالة إنسانية عظيمة!",
+                "جهودك اليوم ستصنع غدًا أفضل لك وللآخرين!",
+                "كل روح تلمسها، تترك فيها أثرًا جميلًا!",
+                "الابتسامة دواء القلوب!",
+                "أنت قصة نجاح تُكتب بحروف من نور!"
+            ];
             
             let randomMessage = messages[Math.floor(Math.random() * messages.length)];
             let colors = ["#ff7675", "#6c5ce7", "#55efc4", "#fdcb6e", "#81ecec"];
             let randomColor = colors[Math.floor(Math.random() * colors.length)];
             
-            let resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `<span style="color:${randomColor}; font-size: 30px;">${name}</span><br>${randomMessage}`;
+            resultDiv.classList.add("show");
         }
     </script>
 </body>
